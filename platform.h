@@ -8,6 +8,14 @@
 	#define LOG_RAW(...) printf(__VA_ARGS__)
 #endif
 
+#define WS2812_PIN (16)
+
+#define VFD_SDA_PIN (15)
+#define VFD_CLK_PIN (14)
+#define VFD_CS_PIN (13)
+#define VFD_RST_PIN (11)
+#define VFD_HV_PIN (10)
+
 // REGEXP: #define UEVT_\S+_BASE
 #define UEVT_APP_BASE (0xAE00)
 #define UEVT_APP_POWERUP (UEVT_APP_BASE | 0x01)
@@ -20,6 +28,7 @@
 
 #define UEVT_RTC_BASE (0x0000)
 #define UEVT_TIMER_4HZ (UEVT_RTC_BASE | 0x10)
+#define UEVT_TIMER_64HZ (UEVT_RTC_BASE | 0x11)
 
 #define UEVT_BTN_BASE (0x0100)
 #define UEVT_BTN_LEFT_DOWN (UEVT_BTN_BASE | 0x01)

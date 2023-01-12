@@ -3,30 +3,39 @@ cmake_minimum_required(VERSION 3.16)
 # Pull in SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(RP2040_Template C CXX ASM)
+project(VFD_Clock C CXX ASM)
 
 pico_sdk_init()
 
-add_definitions(-DG_LOG_ENABLED=1 -DEVT_LOG_ENABLED=1)
+set(CMAKE_BUILD_TYPE "Release")
+
+add_definitions(-DG_LOG_ENABLED=1 -DEVT_LOG_ENABLED=0)
 add_subdirectory(scheduler)
 
-add_executable(RP2040_Template main.c)
+add_executable(VFD_Clock
+	main.c
+	display.c
+)
 
 # Link with the pico stdlib
 # hardware_clocks hardware_i2c hardware_pio hardware_interp hardware_rtc hardware_uart hardware_irq hardware_resets
 # pico_unique_id
 # tinyusb_host tinyusb_device tinyusb_board
-target_link_libraries(RP2040_Template
+target_link_libraries(VFD_Clock
 	scheduler
 	pico_stdlib
 	pico_sync
 	hardware_adc
 	hardware_sync
+	hardware_spi
+	hardware_clocks
+	hardware_xosc
+	hardware_pio
 )
 
 # Create map/bin/hex/uf2 files
-pico_add_extra_outputs(RP2040_Template)
+pico_add_extra_outputs(VFD_Clock)
 
 # Enable USB serial
-pico_enable_stdio_usb(RP2040_Template 1)
-pico_enable_stdio_uart(RP2040_Template 0)
+pico_enable_stdio_usb(VFD_Clock 1)
+pico_enable_stdio_uart(VFD_Clock 0)

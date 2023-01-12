@@ -1,5 +1,7 @@
-# pico template with scheduler
-rpi pico template with scheduler
+
+# VFD-Clock
+
+Pomodoro-VFD version
 
 ## prepare
 
@@ -38,3 +40,16 @@ make clean
 # rebuild
 make rebuild
 ```
+
+# Hardware
+
+## pin map
+
+- Button Left: `GP6` (Active Low)
+- Button Right: `GP7` (Active Low)
+- Buzzer: `GP5` (Active Low)
+- VFD CS: `GP13`
+- VFD RST: `GP11`
+- VFD CP: `GP14`
+- VFD DA: `GP15`
+- VFD HV: `GP10`

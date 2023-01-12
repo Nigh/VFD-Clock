@@ -7,9 +7,12 @@
 #include "scheduler/uevent.h"
 #include "scheduler/scheduler.h"
 
-#include "platform.h"
+#include "hardware/pio.h"
+#include "hardware/clocks.h"
+#include "ws2812/ws2812.pio.h"
 
-#define LED_PIN PICO_DEFAULT_LED_PIN
+#include "platform.h"
+#include "display.h"
 
 #include "pico/sync.h"
 critical_section_t scheduler_lock;
@@ -23,20 +26,9 @@ static __inline void CRITICAL_REGION_EXIT(void) {
 	critical_section_exit(&scheduler_lock);
 }
 
-bool timer_4hz_callback(struct repeating_timer* t) {
-	printf("Repeat at %lld\n", time_us_64());
-	uevt_bc_e(UEVT_TIMER_4HZ);
+bool timer_64hz_callback(struct repeating_timer* t) {
+	uevt_bc_e(UEVT_TIMER_64HZ);
 	return true;
-}
-
-void led_blink_routine(void) {
-	static uint8_t _tick = 0;
-	_tick += 1;
-	if(_tick & 0x1) {
-		gpio_put(LED_PIN, 1);
-	} else {
-		gpio_put(LED_PIN, 0);
-	}
 }
 
 void temperature_routine(void) {
@@ -51,11 +43,46 @@ void temperature_routine(void) {
 	tick += 1;
 }
 
+static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b) {
+	return ((uint32_t)(r) << 8) | ((uint32_t)(g) << 16) | (uint32_t)(b);
+}
+static inline void put_pixel(uint32_t pixel_grb) {
+	pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
+}
+void led_blink_routine(void) {
+	static uint8_t _tick = 0;
+	_tick += 1;
+	if(_tick == 55) {
+		put_pixel(urgb_u32(87 / 10, 209 / 8, 180 / 18));
+	}
+	if(_tick == 60) {
+		put_pixel(0);
+		_tick = 0;
+	}
+}
+
+void vfd_routine(void) {
+	static uint8_t startBin = 0;
+	uint8_t bb = startBin;
+	uint8_t bitmap[40];
+	uint8_t* p = bitmap;
+	for(uint8_t j = 0; j < 8; j++) {
+		for(uint8_t i = 0; i < 5; i++) {
+			*p++ = bb++;
+		}
+		bb += 2;
+	}
+	set_CGRAM_all(bitmap);
+}
+
 void main_handler(uevt_t* evt) {
 	switch(evt->evt_id) {
 		case UEVT_TIMER_4HZ:
-			led_blink_routine();
 			temperature_routine();
+			break;
+		case UEVT_TIMER_64HZ:
+			led_blink_routine();
+			vfd_routine();
 			break;
 		case UEVT_ADC_TEMPERATURE_RESULT:
 			printf("Temperature is %0.2f\n", *((float*)(evt->content)));
@@ -63,23 +90,32 @@ void main_handler(uevt_t* evt) {
 	}
 }
 
+#include "hardware/xosc.h"
 int main() {
 	CRITICAL_REGION_INIT();
 	app_sched_init();
 	user_event_init();
 	user_event_handler_regist(main_handler);
 
+	xosc_init();
 	stdio_init_all();
 
 	adc_init();
 	adc_set_temp_sensor_enabled(true);
 	adc_select_input(4);
 
-	gpio_init(LED_PIN);
-	gpio_set_dir(LED_PIN, GPIO_OUT);
+	PIO pio = pio0;
+	uint offset = pio_add_program(pio, &ws2812_program);
+	ws2812_program_init(pio, 0, offset, WS2812_PIN, 800000, false);
+	put_pixel(urgb_u32(10, 0, 0));
+	// sleep_ms(2000);
+	put_pixel(0);
+	// gpio_init(LED_PIN);
+	// gpio_set_dir(LED_PIN, GPIO_OUT);
+	display_init();
 
 	struct repeating_timer timer;
-	add_repeating_timer_ms(250, timer_4hz_callback, NULL, &timer);
+	add_repeating_timer_ms(17, timer_64hz_callback, NULL, &timer);
 
 	while(true) {
 		app_sched_execute();
