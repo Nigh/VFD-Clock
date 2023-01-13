@@ -3,7 +3,7 @@
 BUILD_DIR = build
 
 
-.PHONY: clean default build rebuild
+.PHONY: clean default build rebuild assets
 
 default: build
 
@@ -19,3 +19,6 @@ rebuild: clean build
 
 format:
 	bash format.sh
+
+assets:
+	./assets/p2a.exe -w -in ./assets/ui -out ./assets 

@@ -63,7 +63,7 @@ void led_blink_routine(void) {
 
 void vfd_routine(void) {
 	static uint8_t startBin = 0;
-	uint8_t bb = startBin;
+	uint8_t bb = startBin++;
 	uint8_t bitmap[40];
 	uint8_t* p = bitmap;
 	for(uint8_t j = 0; j < 8; j++) {
@@ -76,13 +76,19 @@ void vfd_routine(void) {
 }
 
 void main_handler(uevt_t* evt) {
+	static uint8_t flag = 0;
 	switch(evt->evt_id) {
 		case UEVT_TIMER_4HZ:
 			temperature_routine();
+			ui_test();
 			break;
 		case UEVT_TIMER_64HZ:
 			led_blink_routine();
-			vfd_routine();
+			// vfd_routine();
+			flag += 1;
+			if((flag & 0x7) == 0) {
+				uevt_bc_e(UEVT_TIMER_4HZ);
+			}
 			break;
 		case UEVT_ADC_TEMPERATURE_RESULT:
 			printf("Temperature is %0.2f\n", *((float*)(evt->content)));
@@ -108,10 +114,7 @@ int main() {
 	uint offset = pio_add_program(pio, &ws2812_program);
 	ws2812_program_init(pio, 0, offset, WS2812_PIN, 800000, false);
 	put_pixel(urgb_u32(10, 0, 0));
-	// sleep_ms(2000);
 	put_pixel(0);
-	// gpio_init(LED_PIN);
-	// gpio_set_dir(LED_PIN, GPIO_OUT);
 	display_init();
 
 	struct repeating_timer timer;

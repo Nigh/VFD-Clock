@@ -169,10 +169,6 @@ void display_init(void) {
 	sleep_us(4);
 	set_dimming_level(180);
 	sleep_us(4);
-	// test_all_on();
-	// sleep_us(4);
-	// test_cgram_on();
-	// sleep_us(4);
 	set_DRAM_map();
 	sleep_us(4);
 	set_display_onoff(1);

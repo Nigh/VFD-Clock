@@ -15,6 +15,8 @@ add_subdirectory(scheduler)
 add_executable(VFD_Clock
 	main.c
 	display.c
+	assets.c
+	ui.c
 )
 
 # Link with the pico stdlib
