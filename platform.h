@@ -16,6 +16,10 @@
 #define VFD_RST_PIN (11)
 #define VFD_HV_PIN (10)
 
+#define BUZZER_PIN (5)
+#define BTN_L_PIN (6)
+#define BTN_R_PIN (7)
+
 // REGEXP: #define UEVT_\S+_BASE
 #define UEVT_APP_BASE (0xAE00)
 #define UEVT_APP_POWERUP (UEVT_APP_BASE | 0x01)

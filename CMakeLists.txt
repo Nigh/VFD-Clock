@@ -17,6 +17,7 @@ add_executable(VFD_Clock
 	display.c
 	assets.c
 	ui.c
+	stopwatch.c
 )
 
 # Link with the pico stdlib

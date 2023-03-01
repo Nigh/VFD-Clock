@@ -21,6 +21,20 @@ static void draw_bitmap_to(sBITMAP* bp, uint8_t pos) {
 	}
 }
 
+void draw_buffer_clear(void) {
+	for (uint8_t i = 0; i < 40; i++) {
+		display_buffer[i] = 0;
+	}
+}
+void draw_bitmap_to_all(sBITMAP* bp) {
+	for (uint8_t i = 0; i < 8; i++) {
+		draw_bitmap_to(bp, i);
+	}
+}
+void draw_update(void) {
+	set_CGRAM_all(display_buffer);
+}
+
 uint8_t test_array[8] = {0,1,2,3,4,5,6,7};
 void ui_test(void) {
 	for (uint8_t i = 0; i < 8; i++) {

@@ -13,6 +13,7 @@
 
 #include "platform.h"
 #include "display.h"
+#include "assets.h"
 
 #include "pico/sync.h"
 critical_section_t scheduler_lock;
@@ -91,6 +92,10 @@ void sys_init(void) {
 	put_pixel(0);
 	display_init();
 
+	gpio_init(BUZZER_PIN);
+	gpio_set_dir(BUZZER_PIN, GPIO_OUT);
+	gpio_put(BUZZER_PIN, 1);
+
 	static struct repeating_timer timer;
 	add_repeating_timer_ms(17, timer_64hz_callback, NULL, &timer);
 }
@@ -107,18 +112,53 @@ gstate global_state = FSM_NULL;
 gstate next_state = FSM_BOOT;
 
 void boot_handler(uevt_t* evt) {
+	static uint16_t start_timer = 0;
+	static uint8_t boot_frame = 0;
 	switch(evt->evt_id) {
 		case UEVT_FSM_STATE_CHANGE:
 			sys_init();
-			break;
-		case UEVT_TIMER_4HZ:
-			ui_test();
+			start_timer = 0;
+			boot_frame = 0;
 			break;
 		case UEVT_TIMER_64HZ:
+			start_timer += 1;
+			if((start_timer == 3) || (start_timer == 15)) {
+				gpio_put(BUZZER_PIN, 0);
+			}
+			if((start_timer == 10) || start_timer == 22) {
+				gpio_put(BUZZER_PIN, 1);
+			}
+			if((start_timer & 0x7) == 0) {
+				if(boot_frame <= 3) {
+					if(start_timer >= 22) {
+						draw_bitmap_to_all(boot_array[boot_frame]);
+						draw_update();
+						boot_frame += 1;
+					}
+				} else if(boot_frame <= 5) {
+					if(start_timer >= 72) {
+						draw_bitmap_to_all(boot_array[boot_frame]);
+						draw_update();
+						boot_frame += 1;
+					}
+				} else {
+					if(boot_frame <= 6) {
+						draw_buffer_clear();
+						draw_update();
+					}
+					boot_frame += 1;
+					if(boot_frame > 9) {
+						next_state = FSM_STOPWATCH;
+					}
+				}
+			}
 			break;
 	}
 }
 
+extern void stopwatch_handler(uevt_t* evt);
+// extern void timer_handler(uevt_t* evt);
+// extern void pomodoro_handler(uevt_t* evt);
 void fsm_handler(uevt_t* evt) {
 	switch(global_state) {
 		case FSM_BOOT:
@@ -127,6 +167,7 @@ void fsm_handler(uevt_t* evt) {
 		case FSM_SLEEP:
 			break;
 		case FSM_STOPWATCH:
+			stopwatch_handler(evt);
 			break;
 		case FSM_TIMER:
 			break;
