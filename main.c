@@ -75,12 +75,75 @@ void vfd_routine(void) {
 	set_CGRAM_all(bitmap);
 }
 
+#include "hardware/xosc.h"
+void sys_init(void) {
+	xosc_init();
+	stdio_init_all();
+
+	adc_init();
+	adc_set_temp_sensor_enabled(true);
+	adc_select_input(4);
+
+	PIO pio = pio0;
+	uint offset = pio_add_program(pio, &ws2812_program);
+	ws2812_program_init(pio, 0, offset, WS2812_PIN, 800000, false);
+	put_pixel(urgb_u32(10, 0, 0));
+	put_pixel(0);
+	display_init();
+
+	static struct repeating_timer timer;
+	add_repeating_timer_ms(17, timer_64hz_callback, NULL, &timer);
+}
+
+typedef enum {
+	FSM_NULL,
+	FSM_BOOT,
+	FSM_SLEEP,
+	FSM_STOPWATCH,
+	FSM_TIMER,
+	FSM_POMODORO
+} gstate;
+gstate global_state = FSM_NULL;
+gstate next_state = FSM_BOOT;
+
+void boot_handler(uevt_t* evt) {
+	switch(evt->evt_id) {
+		case UEVT_FSM_STATE_CHANGE:
+			sys_init();
+			break;
+		case UEVT_TIMER_4HZ:
+			ui_test();
+			break;
+		case UEVT_TIMER_64HZ:
+			break;
+	}
+}
+
+void fsm_handler(uevt_t* evt) {
+	switch(global_state) {
+		case FSM_BOOT:
+			boot_handler(evt);
+			break;
+		case FSM_SLEEP:
+			break;
+		case FSM_STOPWATCH:
+			break;
+		case FSM_TIMER:
+			break;
+		case FSM_POMODORO:
+			break;
+	}
+	if(next_state != global_state) {
+		global_state = next_state;
+		uevt_bc_e(UEVT_FSM_STATE_CHANGE);
+	}
+}
+
 void main_handler(uevt_t* evt) {
 	static uint8_t flag = 0;
 	switch(evt->evt_id) {
 		case UEVT_TIMER_4HZ:
 			temperature_routine();
-			ui_test();
 			break;
 		case UEVT_TIMER_64HZ:
 			led_blink_routine();
@@ -96,29 +159,13 @@ void main_handler(uevt_t* evt) {
 	}
 }
 
-#include "hardware/xosc.h"
 int main() {
 	CRITICAL_REGION_INIT();
 	app_sched_init();
 	user_event_init();
 	user_event_handler_regist(main_handler);
-
-	xosc_init();
-	stdio_init_all();
-
-	adc_init();
-	adc_set_temp_sensor_enabled(true);
-	adc_select_input(4);
-
-	PIO pio = pio0;
-	uint offset = pio_add_program(pio, &ws2812_program);
-	ws2812_program_init(pio, 0, offset, WS2812_PIN, 800000, false);
-	put_pixel(urgb_u32(10, 0, 0));
-	put_pixel(0);
-	display_init();
-
-	struct repeating_timer timer;
-	add_repeating_timer_ms(17, timer_64hz_callback, NULL, &timer);
+	user_event_handler_regist(fsm_handler);
+	uevt_bc_e(UEVT_FSM_NULL);
 
 	while(true) {
 		app_sched_execute();
