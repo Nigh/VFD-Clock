@@ -92,6 +92,30 @@ const uint8_t add[5] = {
 	0x00, 0x08, 0x1C, 0x08, 0x00,
 };
 const sBITMAP add_bmp = {5, 7, add};
+const uint8_t boot_01[5] = {
+	0x08, 0x08, 0x08, 0x08, 0x08,
+};
+const sBITMAP boot_01_bmp = {5, 7, boot_01};
+const uint8_t boot_02[5] = {
+	0x1C, 0x1C, 0x1C, 0x1C, 0x1C,
+};
+const sBITMAP boot_02_bmp = {5, 7, boot_02};
+const uint8_t boot_03[5] = {
+	0x3E, 0x3E, 0x3E, 0x3E, 0x3E,
+};
+const sBITMAP boot_03_bmp = {5, 7, boot_03};
+const uint8_t boot_04[5] = {
+	0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
+};
+const sBITMAP boot_04_bmp = {5, 7, boot_04};
+const uint8_t boot_05[5] = {
+	0x7F, 0x7F, 0x00, 0x7F, 0x7F,
+};
+const sBITMAP boot_05_bmp = {5, 7, boot_05};
+const uint8_t boot_06[5] = {
+	0x7F, 0x00, 0x00, 0x00, 0x7F,
+};
+const sBITMAP boot_06_bmp = {5, 7, boot_06};
 const uint8_t colon[5] = {
 	0x00, 0x00, 0x14, 0x00, 0x00,
 };
@@ -124,6 +148,15 @@ const uint8_t times[5] = {
 	0x00, 0x14, 0x08, 0x14, 0x00,
 };
 const sBITMAP times_bmp = {5, 7, times};
+
+const sBITMAP* boot_array[6] = {
+	&boot_01_bmp, // 01.png
+	&boot_02_bmp, // 02.png
+	&boot_03_bmp, // 03.png
+	&boot_04_bmp, // 04.png
+	&boot_05_bmp, // 05.png
+	&boot_06_bmp, // 06.png
+};
 
 const sBITMAP* H6_array[10] = {
 	&H6_a0_bmp, // a0.png
