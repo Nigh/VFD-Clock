@@ -6,7 +6,7 @@
 
 static uint8_t display_buffer[40];
 
-static void draw_bitmap_to(sBITMAP* bp, uint8_t pos) {
+void draw_bitmap_to(sBITMAP* bp, uint8_t pos) {
 	if(pos>7) {
 		return;
 	}
@@ -18,6 +18,15 @@ static void draw_bitmap_to(sBITMAP* bp, uint8_t pos) {
 	}
 	for (uint8_t i = 0; i < w; i++) {
 		*pb_t++ = *pb_s++;
+	}
+}
+void draw_clear_to(uint8_t pos) {
+	if(pos>7) {
+		return;
+	}
+	uint8_t* pb_t = &display_buffer[5*pos];
+	for (uint8_t i = 0; i < 5; i++) {
+		*pb_t++ = 0;
 	}
 }
 

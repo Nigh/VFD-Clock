@@ -7,6 +7,7 @@
 #include "scheduler/uevent.h"
 #include "scheduler/scheduler.h"
 
+#include "hardware/gpio.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
 #include "ws2812/ws2812.pio.h"
@@ -31,6 +32,11 @@ bool timer_64hz_callback(struct repeating_timer* t) {
 	uevt_bc_e(UEVT_TIMER_64HZ);
 	return true;
 }
+bool timer_100hz_callback(struct repeating_timer* t) {
+	uevt_bc_e(UEVT_TIMER_100HZ);
+	return true;
+}
+
 
 void temperature_routine(void) {
 	static uint16_t tick = 0;
@@ -59,6 +65,31 @@ void led_blink_routine(void) {
 	if(_tick == 60) {
 		put_pixel(0);
 		_tick = 0;
+	}
+}
+
+uint8_t beep_delay = 0;
+uint8_t beep_length = 0;
+void btn_beep(void) {
+	beep_delay = 1;
+	beep_length = 10;
+}
+
+static void buzzer_routine(void) {
+	if(beep_delay > 0) {
+		beep_delay -= 1;
+		if(beep_delay == 0) {
+			if(beep_length<=0) {
+				beep_length == 1;
+			}
+			gpio_put(BUZZER_PIN, 0);
+		}
+	}
+	if(beep_length > 0) {
+		beep_length -= 1;
+		if(beep_length == 0) {
+			gpio_put(BUZZER_PIN, 1);
+		}
 	}
 }
 
@@ -103,7 +134,7 @@ void sys_init(void) {
 	gpio_set_irq_enabled_with_callback(BTN_R_PIN, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
 
 	static struct repeating_timer timer;
-	add_repeating_timer_ms(17, timer_64hz_callback, NULL, &timer);
+	add_repeating_timer_ms(10, timer_100hz_callback, NULL, &timer);
 }
 
 typedef enum {
@@ -126,23 +157,23 @@ void boot_handler(uevt_t* evt) {
 			start_timer = 0;
 			boot_frame = 0;
 			break;
-		case UEVT_TIMER_64HZ:
+		case UEVT_TIMER_100HZ:
 			start_timer += 1;
-			if((start_timer == 3) || (start_timer == 15)) {
+			if((start_timer == 5) || (start_timer == 22)) {
 				gpio_put(BUZZER_PIN, 0);
 			}
-			if((start_timer == 10) || start_timer == 22) {
+			if((start_timer == 15) || start_timer == 33) {
 				gpio_put(BUZZER_PIN, 1);
 			}
 			if((start_timer & 0x7) == 0) {
 				if(boot_frame <= 3) {
-					if(start_timer >= 22) {
+					if(start_timer >= 33) {
 						draw_bitmap_to_all(boot_array[boot_frame]);
 						draw_update();
 						boot_frame += 1;
 					}
 				} else if(boot_frame <= 5) {
-					if(start_timer >= 72) {
+					if(start_timer >= 108) {
 						draw_bitmap_to_all(boot_array[boot_frame]);
 						draw_update();
 						boot_frame += 1;
@@ -192,11 +223,13 @@ void main_handler(uevt_t* evt) {
 		case UEVT_TIMER_4HZ:
 			temperature_routine();
 			break;
-		case UEVT_TIMER_64HZ:
+		case UEVT_TIMER_100HZ:
 			led_blink_routine();
+			buzzer_routine();
 			// vfd_routine();
 			flag += 1;
-			if((flag & 0x7) == 0) {
+			if(flag == 25) {
+				flag = 0;
 				uevt_bc_e(UEVT_TIMER_4HZ);
 			}
 			break;
@@ -205,11 +238,31 @@ void main_handler(uevt_t* evt) {
 			break;
 	}
 }
+#define case_evt_log(XXX) \
+	case XXX:LOG_RAW("EVT:[" #XXX "]\n");break 
 
+void log_handler(uevt_t* evt) {
+	switch(evt->evt_id) {
+		case_evt_log(UEVT_BTN_LEFT_DOWN);
+		case_evt_log(UEVT_BTN_LEFT_RELEASE);
+		case_evt_log(UEVT_BTN_LEFT_LONG);
+		case_evt_log(UEVT_BTN_LEFT_REPEAT);
+		case_evt_log(UEVT_BTN_RIGHT_DOWN);
+		case_evt_log(UEVT_BTN_RIGHT_RELEASE);
+		case_evt_log(UEVT_BTN_RIGHT_LONG);
+		case_evt_log(UEVT_BTN_RIGHT_REPEAT);
+		case_evt_log(UEVT_BTN_BOTH_DOWN);
+		case_evt_log(UEVT_BTN_BOTH_RELEASE);
+		case_evt_log(UEVT_BTN_BOTH_LONG);
+		case_evt_log(UEVT_BTN_BOTH_REPEAT);
+	}
+}
+extern void btn_handler(uevt_t* evt);
 int main() {
 	CRITICAL_REGION_INIT();
 	app_sched_init();
 	user_event_init();
+	user_event_handler_regist(log_handler);
 	user_event_handler_regist(btn_handler);
 	user_event_handler_regist(main_handler);
 	user_event_handler_regist(fsm_handler);
