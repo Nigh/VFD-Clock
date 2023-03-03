@@ -4,6 +4,86 @@
 // Version:v1.29
 #include "bitmap.h"
 
+const uint8_t H4_00[5] = {
+	0x00, 0x3C, 0x24, 0x3C, 0x00,
+};
+const sBITMAP H4_00_bmp = {5, 7, H4_00};
+const uint8_t H4_01[5] = {
+	0x00, 0x04, 0x3C, 0x00, 0x00,
+};
+const sBITMAP H4_01_bmp = {5, 7, H4_01};
+const uint8_t H4_02[5] = {
+	0x00, 0x34, 0x2C, 0x20, 0x00,
+};
+const sBITMAP H4_02_bmp = {5, 7, H4_02};
+const uint8_t H4_03[5] = {
+	0x00, 0x24, 0x3C, 0x3C, 0x00,
+};
+const sBITMAP H4_03_bmp = {5, 7, H4_03};
+const uint8_t H4_04[5] = {
+	0x00, 0x1C, 0x10, 0x3C, 0x00,
+};
+const sBITMAP H4_04_bmp = {5, 7, H4_04};
+const uint8_t H4_05[5] = {
+	0x00, 0x20, 0x2C, 0x34, 0x00,
+};
+const sBITMAP H4_05_bmp = {5, 7, H4_05};
+const uint8_t H4_06[5] = {
+	0x00, 0x3C, 0x34, 0x34, 0x00,
+};
+const sBITMAP H4_06_bmp = {5, 7, H4_06};
+const uint8_t H4_07[5] = {
+	0x00, 0x04, 0x04, 0x3C, 0x00,
+};
+const sBITMAP H4_07_bmp = {5, 7, H4_07};
+const uint8_t H4_08[5] = {
+	0x00, 0x3C, 0x3C, 0x3C, 0x00,
+};
+const sBITMAP H4_08_bmp = {5, 7, H4_08};
+const uint8_t H4_09[5] = {
+	0x00, 0x2C, 0x2C, 0x3C, 0x00,
+};
+const sBITMAP H4_09_bmp = {5, 7, H4_09};
+const uint8_t H5_bottom_0[5] = {
+	0x00, 0x7C, 0x44, 0x7C, 0x00,
+};
+const sBITMAP H5_bottom_0_bmp = {5, 7, H5_bottom_0};
+const uint8_t H5_bottom_1[5] = {
+	0x00, 0x48, 0x7C, 0x40, 0x00,
+};
+const sBITMAP H5_bottom_1_bmp = {5, 7, H5_bottom_1};
+const uint8_t H5_bottom_2[5] = {
+	0x00, 0x6C, 0x54, 0x4C, 0x00,
+};
+const sBITMAP H5_bottom_2_bmp = {5, 7, H5_bottom_2};
+const uint8_t H5_bottom_3[5] = {
+	0x00, 0x44, 0x54, 0x6C, 0x00,
+};
+const sBITMAP H5_bottom_3_bmp = {5, 7, H5_bottom_3};
+const uint8_t H5_bottom_4[5] = {
+	0x00, 0x38, 0x24, 0x7C, 0x20,
+};
+const sBITMAP H5_bottom_4_bmp = {5, 7, H5_bottom_4};
+const uint8_t H5_bottom_5[5] = {
+	0x00, 0x4C, 0x54, 0x74, 0x00,
+};
+const sBITMAP H5_bottom_5_bmp = {5, 7, H5_bottom_5};
+const uint8_t H5_bottom_6[5] = {
+	0x00, 0x7C, 0x54, 0x74, 0x00,
+};
+const sBITMAP H5_bottom_6_bmp = {5, 7, H5_bottom_6};
+const uint8_t H5_bottom_7[5] = {
+	0x00, 0x64, 0x14, 0x0C, 0x00,
+};
+const sBITMAP H5_bottom_7_bmp = {5, 7, H5_bottom_7};
+const uint8_t H5_bottom_8[5] = {
+	0x00, 0x6C, 0x54, 0x6C, 0x00,
+};
+const sBITMAP H5_bottom_8_bmp = {5, 7, H5_bottom_8};
+const uint8_t H5_bottom_9[5] = {
+	0x00, 0x5C, 0x54, 0x7C, 0x00,
+};
+const sBITMAP H5_bottom_9_bmp = {5, 7, H5_bottom_9};
 const uint8_t H6_a0[5] = {
 	0x00, 0x1E, 0x21, 0x21, 0x1E,
 };
@@ -149,13 +229,30 @@ const uint8_t times[5] = {
 };
 const sBITMAP times_bmp = {5, 7, times};
 
-const sBITMAP* boot_array[6] = {
-	&boot_01_bmp, // 01.png
-	&boot_02_bmp, // 02.png
-	&boot_03_bmp, // 03.png
-	&boot_04_bmp, // 04.png
-	&boot_05_bmp, // 05.png
-	&boot_06_bmp, // 06.png
+const sBITMAP* H4_array[10] = {
+	&H4_00_bmp, // 00.png
+	&H4_01_bmp, // 01.png
+	&H4_02_bmp, // 02.png
+	&H4_03_bmp, // 03.png
+	&H4_04_bmp, // 04.png
+	&H4_05_bmp, // 05.png
+	&H4_06_bmp, // 06.png
+	&H4_07_bmp, // 07.png
+	&H4_08_bmp, // 08.png
+	&H4_09_bmp, // 09.png
+};
+
+const sBITMAP* H5_bottom_array[10] = {
+	&H5_bottom_0_bmp, // 0.png
+	&H5_bottom_1_bmp, // 1.png
+	&H5_bottom_2_bmp, // 2.png
+	&H5_bottom_3_bmp, // 3.png
+	&H5_bottom_4_bmp, // 4.png
+	&H5_bottom_5_bmp, // 5.png
+	&H5_bottom_6_bmp, // 6.png
+	&H5_bottom_7_bmp, // 7.png
+	&H5_bottom_8_bmp, // 8.png
+	&H5_bottom_9_bmp, // 9.png
 };
 
 const sBITMAP* H6_array[10] = {
@@ -182,4 +279,13 @@ const sBITMAP* H7_array[10] = {
 	&H7_07_bmp, // 07.png
 	&H7_08_bmp, // 08.png
 	&H7_09_bmp, // 09.png
+};
+
+const sBITMAP* boot_array[6] = {
+	&boot_01_bmp, // 01.png
+	&boot_02_bmp, // 02.png
+	&boot_03_bmp, // 03.png
+	&boot_04_bmp, // 04.png
+	&boot_05_bmp, // 05.png
+	&boot_06_bmp, // 06.png
 };
