@@ -77,6 +77,7 @@ void vfd_routine(void) {
 }
 
 #include "hardware/xosc.h"
+extern void btn_callback(uint gpio, uint32_t events);
 void sys_init(void) {
 	xosc_init();
 	stdio_init_all();
@@ -95,6 +96,11 @@ void sys_init(void) {
 	gpio_init(BUZZER_PIN);
 	gpio_set_dir(BUZZER_PIN, GPIO_OUT);
 	gpio_put(BUZZER_PIN, 1);
+
+	gpio_set_pulls(BTN_L_PIN, true, false);
+	gpio_set_pulls(BTN_R_PIN, true, false);
+	gpio_set_irq_enabled_with_callback(BTN_L_PIN, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
+	gpio_set_irq_enabled_with_callback(BTN_R_PIN, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
 
 	static struct repeating_timer timer;
 	add_repeating_timer_ms(17, timer_64hz_callback, NULL, &timer);
@@ -204,6 +210,7 @@ int main() {
 	CRITICAL_REGION_INIT();
 	app_sched_init();
 	user_event_init();
+	user_event_handler_regist(btn_handler);
 	user_event_handler_regist(main_handler);
 	user_event_handler_regist(fsm_handler);
 	uevt_bc_e(UEVT_FSM_NULL);
