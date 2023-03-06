@@ -21,4 +21,4 @@ format:
 	bash format.sh
 
 assets:
-	./assets/p2a.exe -w -in ./assets/ui -out ./assets 
+	./assets/p2a-win-amd64.exe -c white -in ./assets/ui -out ./assets 
