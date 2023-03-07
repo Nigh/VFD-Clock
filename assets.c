@@ -164,6 +164,46 @@ const uint8_t H7_09[5] = {
 	0x26, 0x49, 0x49, 0x49, 0x3E,
 };
 const sBITMAP H7_09_bmp = {5, 7, H7_09};
+const uint8_t H7_Sq_0[5] = {
+	0x7F, 0x7F, 0x63, 0x7F, 0x7F,
+};
+const sBITMAP H7_Sq_0_bmp = {5, 7, H7_Sq_0};
+const uint8_t H7_Sq_1[5] = {
+	0x00, 0x03, 0x7F, 0x7F, 0x00,
+};
+const sBITMAP H7_Sq_1_bmp = {5, 7, H7_Sq_1};
+const uint8_t H7_Sq_2[5] = {
+	0x7B, 0x7B, 0x6B, 0x6F, 0x6F,
+};
+const sBITMAP H7_Sq_2_bmp = {5, 7, H7_Sq_2};
+const uint8_t H7_Sq_3[5] = {
+	0x63, 0x6B, 0x6B, 0x7F, 0x7F,
+};
+const sBITMAP H7_Sq_3_bmp = {5, 7, H7_Sq_3};
+const uint8_t H7_Sq_4[5] = {
+	0x1F, 0x1F, 0x10, 0x7F, 0x7F,
+};
+const sBITMAP H7_Sq_4_bmp = {5, 7, H7_Sq_4};
+const uint8_t H7_Sq_5[5] = {
+	0x6F, 0x6F, 0x6B, 0x6B, 0x7B,
+};
+const sBITMAP H7_Sq_5_bmp = {5, 7, H7_Sq_5};
+const uint8_t H7_Sq_6[5] = {
+	0x7F, 0x7F, 0x6B, 0x7B, 0x7B,
+};
+const sBITMAP H7_Sq_6_bmp = {5, 7, H7_Sq_6};
+const uint8_t H7_Sq_7[5] = {
+	0x03, 0x03, 0x03, 0x7F, 0x7F,
+};
+const sBITMAP H7_Sq_7_bmp = {5, 7, H7_Sq_7};
+const uint8_t H7_Sq_8[5] = {
+	0x7F, 0x7F, 0x6B, 0x7F, 0x7F,
+};
+const sBITMAP H7_Sq_8_bmp = {5, 7, H7_Sq_8};
+const uint8_t H7_Sq_9[5] = {
+	0x6F, 0x6F, 0x6B, 0x7F, 0x7F,
+};
+const sBITMAP H7_Sq_9_bmp = {5, 7, H7_Sq_9};
 const uint8_t X[5] = {
 	0x22, 0x14, 0x08, 0x14, 0x22,
 };
@@ -279,6 +319,19 @@ const sBITMAP* H7_array[10] = {
 	&H7_07_bmp, // 07.png
 	&H7_08_bmp, // 08.png
 	&H7_09_bmp, // 09.png
+};
+
+const sBITMAP* H7_Sq_array[10] = {
+	&H7_Sq_0_bmp, // 0.png
+	&H7_Sq_1_bmp, // 1.png
+	&H7_Sq_2_bmp, // 2.png
+	&H7_Sq_3_bmp, // 3.png
+	&H7_Sq_4_bmp, // 4.png
+	&H7_Sq_5_bmp, // 5.png
+	&H7_Sq_6_bmp, // 6.png
+	&H7_Sq_7_bmp, // 7.png
+	&H7_Sq_8_bmp, // 8.png
+	&H7_Sq_9_bmp, // 9.png
 };
 
 const sBITMAP* boot_array[6] = {
