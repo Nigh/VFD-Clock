@@ -19,6 +19,7 @@ add_executable(VFD_Clock
 	ui.c
 	btn.c
 	stopwatch.c
+	pomodoro.c
 )
 
 # Link with the pico stdlib

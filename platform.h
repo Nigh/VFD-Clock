@@ -57,7 +57,6 @@ extern void btn_beep(void);
 #define UEVT_BTN_BOTH_LONG (UEVT_BTN_BASE | 0x23)
 #define UEVT_BTN_BOTH_REPEAT (UEVT_BTN_BASE | 0x24)
 
-
 #define UEVT_ADC_BASE (0x0200)
 #define UEVT_ADC_TEMPERATURE_RESULT (UEVT_ADC_BASE | 0x01)
 

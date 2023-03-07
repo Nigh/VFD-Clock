@@ -21,13 +21,13 @@ void stopwatch_redraw(void) {
 	} else {
 		draw_clear_to(3);
 	}
-	draw_bitmap_to(STOPWATCH_FONT[minute/100], 0);
-	draw_bitmap_to(STOPWATCH_FONT[(minute/10)%10], 1);
-	draw_bitmap_to(STOPWATCH_FONT[minute%10], 2);
-	draw_bitmap_to(STOPWATCH_FONT[sec/10], 4);
-	draw_bitmap_to(STOPWATCH_FONT[sec%10], 5);
-	draw_bitmap_to(MSEC_FONT[msec/10], 6);
-	draw_bitmap_to(MSEC_FONT[msec%10], 7);
+	draw_bitmap_to(STOPWATCH_FONT[minute / 100], 0);
+	draw_bitmap_to(STOPWATCH_FONT[(minute / 10) % 10], 1);
+	draw_bitmap_to(STOPWATCH_FONT[minute % 10], 2);
+	draw_bitmap_to(STOPWATCH_FONT[sec / 10], 4);
+	draw_bitmap_to(STOPWATCH_FONT[sec % 10], 5);
+	draw_bitmap_to(MSEC_FONT[msec / 10], 6);
+	draw_bitmap_to(MSEC_FONT[msec % 10], 7);
 	draw_update();
 }
 
@@ -66,6 +66,9 @@ void stopwatch_handler(uevt_t* evt) {
 			if(running == 2) {
 				btn_beep();
 				clear();
+			} else if(running == 0) {
+				btn_beep();
+				// TODO: 切换模式
 			}
 			break;
 		case UEVT_FSM_STATE_CHANGE:
@@ -78,11 +81,11 @@ void stopwatch_handler(uevt_t* evt) {
 				if(msec >= 100) {
 					colon_show = true;
 					msec = 0;
-					sec+=1;
+					sec += 1;
 					if(sec >= 60) {
 						sec = 0;
-						minute+=1;
-						if(minute>=99) {
+						minute += 1;
+						if(minute >= 99) {
 							pause();
 						}
 					}

@@ -37,7 +37,6 @@ bool timer_100hz_callback(struct repeating_timer* t) {
 	return true;
 }
 
-
 void temperature_routine(void) {
 	static uint16_t tick = 0;
 	static float _t = 0;
@@ -79,7 +78,7 @@ static void buzzer_routine(void) {
 	if(beep_delay > 0) {
 		beep_delay -= 1;
 		if(beep_delay == 0) {
-			if(beep_length<=0) {
+			if(beep_length <= 0) {
 				beep_length == 1;
 			}
 			gpio_put(BUZZER_PIN, 0);
@@ -185,7 +184,7 @@ void boot_handler(uevt_t* evt) {
 					}
 					boot_frame += 1;
 					if(boot_frame > 9) {
-						next_state = FSM_STOPWATCH;
+						next_state = FSM_POMODORO;
 					}
 				}
 			}
@@ -195,7 +194,7 @@ void boot_handler(uevt_t* evt) {
 
 extern void stopwatch_handler(uevt_t* evt);
 // extern void timer_handler(uevt_t* evt);
-// extern void pomodoro_handler(uevt_t* evt);
+extern void pomodoro_handler(uevt_t* evt);
 void fsm_handler(uevt_t* evt) {
 	switch(global_state) {
 		case FSM_BOOT:
@@ -209,6 +208,7 @@ void fsm_handler(uevt_t* evt) {
 		case FSM_TIMER:
 			break;
 		case FSM_POMODORO:
+			pomodoro_handler(evt);
 			break;
 	}
 	if(next_state != global_state) {
@@ -239,7 +239,7 @@ void main_handler(uevt_t* evt) {
 	}
 }
 #define case_evt_log(XXX) \
-	case XXX:LOG_RAW("EVT:[" #XXX "]\n");break 
+	case XXX: LOG_RAW("EVT:[" #XXX "]\n"); break
 
 void log_handler(uevt_t* evt) {
 	switch(evt->evt_id) {
