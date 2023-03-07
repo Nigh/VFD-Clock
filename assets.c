@@ -185,7 +185,7 @@ const uint8_t H7_Sq_4[5] = {
 };
 const sBITMAP H7_Sq_4_bmp = {5, 7, H7_Sq_4};
 const uint8_t H7_Sq_5[5] = {
-	0x6F, 0x6F, 0x6B, 0x6B, 0x7B,
+	0x6F, 0x6F, 0x6B, 0x7B, 0x7B,
 };
 const sBITMAP H7_Sq_5_bmp = {5, 7, H7_Sq_5};
 const uint8_t H7_Sq_6[5] = {
@@ -264,10 +264,62 @@ const uint8_t slash[5] = {
 	0x00, 0x10, 0x08, 0x04, 0x00,
 };
 const sBITMAP slash_bmp = {5, 7, slash};
+const uint8_t sleep_01[5] = {
+	0x6C, 0x6C, 0x6C, 0x6C, 0x6C,
+};
+const sBITMAP sleep_01_bmp = {5, 7, sleep_01};
+const uint8_t sleep_02[5] = {
+	0x36, 0x36, 0x36, 0x36, 0x36,
+};
+const sBITMAP sleep_02_bmp = {5, 7, sleep_02};
+const uint8_t sleep_03[5] = {
+	0x1B, 0x1B, 0x1B, 0x1B, 0x1B,
+};
+const sBITMAP sleep_03_bmp = {5, 7, sleep_03};
 const uint8_t times[5] = {
 	0x00, 0x14, 0x08, 0x14, 0x00,
 };
 const sBITMAP times_bmp = {5, 7, times};
+const uint8_t work_00[5] = {
+	0x00, 0x00, 0x00, 0x00, 0x00,
+};
+const sBITMAP work_00_bmp = {5, 7, work_00};
+const uint8_t work_01[5] = {
+	0x00, 0x00, 0x40, 0x00, 0x00,
+};
+const sBITMAP work_01_bmp = {5, 7, work_01};
+const uint8_t work_02[5] = {
+	0x00, 0x40, 0x60, 0x40, 0x00,
+};
+const sBITMAP work_02_bmp = {5, 7, work_02};
+const uint8_t work_03[5] = {
+	0x40, 0x60, 0x70, 0x60, 0x40,
+};
+const sBITMAP work_03_bmp = {5, 7, work_03};
+const uint8_t work_04[5] = {
+	0x20, 0x10, 0x08, 0x10, 0x20,
+};
+const sBITMAP work_04_bmp = {5, 7, work_04};
+const uint8_t work_05[5] = {
+	0x10, 0x08, 0x04, 0x08, 0x10,
+};
+const sBITMAP work_05_bmp = {5, 7, work_05};
+const uint8_t work_06[5] = {
+	0x08, 0x04, 0x02, 0x04, 0x08,
+};
+const sBITMAP work_06_bmp = {5, 7, work_06};
+const uint8_t work_07[5] = {
+	0x04, 0x02, 0x01, 0x02, 0x04,
+};
+const sBITMAP work_07_bmp = {5, 7, work_07};
+const uint8_t work_08[5] = {
+	0x02, 0x01, 0x01, 0x01, 0x02,
+};
+const sBITMAP work_08_bmp = {5, 7, work_08};
+const uint8_t work_09[5] = {
+	0x01, 0x01, 0x01, 0x01, 0x01,
+};
+const sBITMAP work_09_bmp = {5, 7, work_09};
 
 const sBITMAP* H4_array[10] = {
 	&H4_00_bmp, // 00.png
@@ -341,4 +393,23 @@ const sBITMAP* boot_array[6] = {
 	&boot_04_bmp, // 04.png
 	&boot_05_bmp, // 05.png
 	&boot_06_bmp, // 06.png
+};
+
+const sBITMAP* sleep_array[3] = {
+	&sleep_01_bmp, // 01.png
+	&sleep_02_bmp, // 02.png
+	&sleep_03_bmp, // 03.png
+};
+
+const sBITMAP* work_array[10] = {
+	&work_00_bmp, // 00.png
+	&work_01_bmp, // 01.png
+	&work_02_bmp, // 02.png
+	&work_03_bmp, // 03.png
+	&work_04_bmp, // 04.png
+	&work_05_bmp, // 05.png
+	&work_06_bmp, // 06.png
+	&work_07_bmp, // 07.png
+	&work_08_bmp, // 08.png
+	&work_09_bmp, // 09.png
 };
