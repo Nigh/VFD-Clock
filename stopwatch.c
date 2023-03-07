@@ -13,7 +13,7 @@ static bool colon_show = true;
 // 0:clear 1:running 2:pause
 static uint8_t running = 0;
 
-#define STOPWATCH_FONT H7_array
+#define STOPWATCH_FONT H7_Sq_array
 #define MSEC_FONT H5_bottom_array
 void stopwatch_redraw(void) {
 	if(colon_show) {
